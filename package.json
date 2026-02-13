@@ -1,6 +1,6 @@
 {
   "name": "maplibre-gl-layer-control-tidop",
-  "version": "0.0.1",
+  "version": "0.0.30",
   "description": "A comprehensive layer control for MapLibre GL with advanced styling capabilities",
   "type": "module",
   "main": "./dist/index.cjs",

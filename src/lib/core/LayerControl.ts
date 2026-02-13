@@ -582,7 +582,9 @@ export class LayerControl implements IControl {
     // Capitalize first letter of each word
     name = name.replace(/\b\w/g, char => char.toUpperCase());
 
-    return name || layerId; // Fallback to original if empty
+   // return name || layerId; 
+   return layerId;
+   // Fallback to original if empty
   }
 
   /**
@@ -1261,7 +1263,9 @@ export class LayerControl implements IControl {
       });
     }
 
-    this.panel.appendChild(item);
+
+    this.panel.insertBefore(item,this.panel.firstChild);
+    //this.panel.appendChild(item);
   }
 
   /**
@@ -1891,7 +1895,8 @@ export class LayerControl implements IControl {
     }
 
     button.addEventListener('click', (e) => {
-      e.stopPropagation();
+      //e.stopPropagation();
+        console.log(e);
       this.toggleStyleEditor(layerId);
     });
 
@@ -1923,6 +1928,10 @@ export class LayerControl implements IControl {
   private openStyleEditor(layerId: string): void {
     const itemEl = this.panel.querySelector(`[data-layer-id="${layerId}"]`);
     if (!itemEl) return;
+
+      const input_id = document.querySelector('#layer-id-selected') as HTMLInputElement;
+      if (input_id)
+          input_id.value = layerId;
 
     // Check if this is a custom layer
     const layerState = this.state.layerStates[layerId];
@@ -1993,8 +2002,11 @@ export class LayerControl implements IControl {
    * Create info panel for custom layers (style editing not supported)
    */
   private createCustomLayerInfoPanel(layerId: string): HTMLDivElement {
+
+    
     const editor = document.createElement('div');
-    editor.className = 'layer-control-style-editor layer-control-custom-info';
+    editor.className = 'layer-control-style-editor layer-control-custom-info d-none';
+    editor.id = 'layer-control-style-editor-div';
 
     // Header
     const header = document.createElement('div');
@@ -2003,6 +2015,7 @@ export class LayerControl implements IControl {
     const title = document.createElement('span');
     title.className = 'style-editor-title';
     title.textContent = 'Layer Info';
+    title.id = 'layer-control-style-editor-title';
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'style-editor-close';
@@ -2084,7 +2097,7 @@ export class LayerControl implements IControl {
     if (layersByType.size === 0) return null;
 
     const editor = document.createElement('div');
-    editor.className = 'layer-control-style-editor';
+    editor.className = 'layer-control-style-editor d-none';
 
     // Header
     const header = document.createElement('div');
@@ -2227,7 +2240,7 @@ export class LayerControl implements IControl {
     if (!layer) return null;
 
     const editor = document.createElement('div');
-    editor.className = 'layer-control-style-editor';
+    editor.className = 'layer-control-style-editor d-none';
 
     // Header
     const header = document.createElement('div');
@@ -3774,7 +3787,8 @@ export class LayerControl implements IControl {
 
     // UI shows top layer first, but we need to move layers in reverse order
     // to maintain the correct stacking
-    const reversedIds = [...uiLayerIds].reverse();
+    //const reversedIds = [...uiLayerIds].reverse();
+    const reversedIds = [...uiLayerIds];
 
     // Build a set of MapLibre layer IDs for quick lookup
     const style = this.map.getStyle();
